@@ -45,7 +45,7 @@
             </div>
             <div class="col-4">
                 <label for="created_at" class="form-label">Created at</label>
-                <input value="{{old('created_at')}}" type="datetime" value="{{$currentDateTime}}" class="form-control" id="created_at" name="created_at">
+                <input type="datetime" value="{{$currentDateTime}}" class="form-control" id="created_at" name="created_at">
             </div>
 
             <div class="col-12">
