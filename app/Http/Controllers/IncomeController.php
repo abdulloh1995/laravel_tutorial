@@ -4,23 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Income;
+use App\Models\IncomeType;
+use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class IncomeController extends Controller
 {
     public function index()
     {
-        $client = Client::find(1);
-        $income = Income::find(2);
+        $incomes = Income::all();
+        $clients = Client::all();
 
-        dd($income->client);
-        dd($client->incomes);
-//        return view('income.index', compact('incomes'));
+
+        return view('income.index', compact('incomes', 'clients'));
     }
 
     public function create()
     {
-        return view('income.create');
+        $clients = Client::all();
+        $types = Type::all();
+        $currentDateTime = Carbon::now();
+        $currentDateTime = $currentDateTime->addHours(5);
+
+        return view('income.create', compact('clients', 'currentDateTime', 'types'));
     }
 
     public function store()
@@ -29,11 +36,17 @@ class IncomeController extends Controller
             'userid' => 'integer',
             'sum' => 'integer',
             'currency' => 'integer',
-            'short_info' => 'string',
-            'created_at' => 'date'
+            'short_info' => '',
+            'created_at' => 'date',
+            'client_id' => 'integer',
+            'types' => ''
         ]);
 
-        Income::create($data);
+        $types = $data['types'];
+        unset($data['types']);
+        $income = Income::create($data);
+
+        $income->types()->attach($types);
 
         return redirect()->route('income.index');
     }
@@ -47,20 +60,27 @@ class IncomeController extends Controller
 
     public function edit(Income $income)
     {
-        return view('income.edit', compact('income'));
+        $clients = Client::all();
+        $types = Type::all();
+        return view('income.edit', compact('income', 'clients', 'types'));
     }
 
     public function update(Income $income)
     {
         $data = request()->validate([
             'userid' => 'integer',
-            'sum' => 'integer',
+            'sum' => 'required|integer',
             'currency' => 'integer',
-            'short_info' => 'string',
-            'created_at' => 'date'
+            'short_info' => '',
+            'created_at' => 'date',
+            'client_id' => 'integer',
+            'types' => ''
         ]);
+        $types = $data['types'];
+        unset($data['types']);
 
         $income->update($data);
+        $income->types()->sync($types);
 
         return redirect()->route('income.show', $income->id);
     }

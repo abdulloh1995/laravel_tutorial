@@ -10,10 +10,16 @@ class Income extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $guarded = [];
 
     public function client()
     {
         return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
+
+    public function types()
+    {
+        return $this->belongsToMany(Type::class, 'income_types', 'income_id', 'type_id');
     }
 }
