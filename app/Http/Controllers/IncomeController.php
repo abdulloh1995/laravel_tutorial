@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\Income;
 use Illuminate\Http\Request;
 
@@ -9,9 +10,12 @@ class IncomeController extends Controller
 {
     public function index()
     {
-        $incomes = Income::all();
+        $client = Client::find(1);
+        $income = Income::find(2);
 
-        return view('income.index', compact('incomes'));
+        dd($income->client);
+        dd($client->incomes);
+//        return view('income.index', compact('incomes'));
     }
 
     public function create()

@@ -11,4 +11,9 @@ class Income extends Model
     use HasFactory;
     use SoftDeletes;
     protected $guarded = [];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class, 'client_id', 'id');
+    }
 }

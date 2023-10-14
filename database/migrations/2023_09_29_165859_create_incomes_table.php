@@ -15,7 +15,6 @@ class CreateIncomesTable extends Migration
     {
         Schema::create('incomes', function (Blueprint $table) {
             $table->id();
-            $table->integer('userid');
             $table->double('sum');
             $table->integer('currency');
             $table->integer('status')->default(1);
@@ -23,6 +22,11 @@ class CreateIncomesTable extends Migration
             $table->timestamps();
 
             $table->softDeletes();
+
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->index('client_id', 'income_client_idx');
+            $table->foreign('client_id', 'income_client_fk')->on('clients')->references('id');
+
         });
     }
 
