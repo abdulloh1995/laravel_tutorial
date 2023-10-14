@@ -3,21 +3,14 @@
 namespace App\Http\Controllers\Income;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Income\UpdateRequest;
 use App\Models\Income;
 
 class UpdateController extends Controller
 {
-    public function __invoke(Income $income)
+    public function __invoke(UpdateRequest $request,Income $income)
     {
-        $data = request()->validate([
-            'userid' => 'integer',
-            'sum' => 'required|integer',
-            'currency' => 'integer',
-            'short_info' => '',
-            'created_at' => 'date',
-            'client_id' => 'integer',
-            'types' => ''
-        ]);
+        $data = $request->validated();
         $types = $data['types'];
         unset($data['types']);
 

@@ -3,21 +3,14 @@
 namespace App\Http\Controllers\Income;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Income\StoreRequest;
 use App\Models\Income;
 
 class StoreController extends Controller
 {
-    public function __invoke()
+    public function __invoke(StoreRequest $request)
     {
-        $data = request()->validate([
-            'userid' => 'integer',
-            'sum' => 'integer',
-            'currency' => 'integer',
-            'short_info' => '',
-            'created_at' => 'date',
-            'client_id' => 'integer',
-            'types' => ''
-        ]);
+        $data = $request->validated();
 
         $types = $data['types'];
         unset($data['types']);
